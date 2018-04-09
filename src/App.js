@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+
 
 class App extends Component {
   constructor() {
@@ -16,21 +16,15 @@ class App extends Component {
   }
 
 
-  nameChangeHandler = (event) => {
+  changeHandler = (event) => {
     this.setState({
-      currentName: event.target.value
+      [event.target.name]: event.target.value
     });
   }
 
-  groupChangeHandler = (event) => {
-    this.setState({
-      groupNumber: event.target.value
-    });
-  }
 
   addNameButtonHandler = (event) => {
     var currentList = this.state.nameList;
-
     currentList.push(this.state.currentName);
 
     this.setState({
@@ -39,9 +33,11 @@ class App extends Component {
     });
   }
 
+
   groupNumberButtonHandler = (event) => {
     this.randomizeNames();
   }
+
 
   outputNameList = () => {
     var currentNameList = this.state.nameList;
@@ -92,30 +88,21 @@ class App extends Component {
 
 
   outputGroups = () => {
-    var finalOutput = [];
-
-    finalOutput.push(
-      <ul key="totalOutput">GROUPS
-        {this.everyGroup()}
-      </ul>
-    );
-
-    return finalOutput;
-  }
-
-  everyGroup = () => {
-    var output = [];
+    var groups = [];
     var index = 0;
 
     this.state.groupList.forEach(group => {
-      output.push(this.singleGroupList(group, index));
+      groups.push(this.singleGroupList(group, index));
       index++;
     });
 
-    console.log(output);
-
-    return output;
+    return(
+      <ul key="totalOutput">GROUPS
+        {groups}
+      </ul>
+    );
   }
+
 
   singleGroupList = (groupNames, index) => {
     var liList = [];
@@ -124,7 +111,12 @@ class App extends Component {
       liList.push(<li key={name}>{name}</li>)
     });
 
-    return <div><ul key={index}>{liList}</ul><button></button></div>
+    return (
+      <div>
+        <ul key={index}>{liList}</ul>
+        <button></button>
+      </div>
+    );
   }
 
 
@@ -132,28 +124,29 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Our Shitty Group Splitter</h1>
         </header>
 
-        <div>
-          <input type='text' id='name' value={this.state.currentName} onChange={this.nameChangeHandler}/>
+        <div className="input">
+          <input type='text' id='name' value={this.state.currentName} name="currentName" onChange={this.changeHandler}/>
 
           <button id='add' onClick={this.addNameButtonHandler}>Add</button>
 
-          <input type='text' id='group-button' value={this.state.groupNumber} onChange={this.groupChangeHandler}/>
+          <input type='text' id='group-button' value={this.state.groupNumber} name="groupNumber" onChange={this.changeHandler}/>
 
           <button id='group' onClick={this.groupNumberButtonHandler}>Randomize</button>
         </div>
 
-        <div>
-          <ul id='nameList'>INPUT LIST
-            {this.outputNameList()}
-          </ul>
-        </div>
+        <div className="output">
+          <div>
+            <ul id='nameList'>INPUT LIST
+              {this.outputNameList()}
+            </ul>
+          </div>
 
-        <div>
-          {this.outputGroups()}
+          <div>
+            {this.outputGroups()}
+          </div>
         </div>
 
       </div>
